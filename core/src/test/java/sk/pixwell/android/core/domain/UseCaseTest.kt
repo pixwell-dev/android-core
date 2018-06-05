@@ -1,12 +1,16 @@
 package sk.pixwell.android.core.domain
 
-import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import io.reactivex.Observable
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.schedulers.Schedulers
-import org.junit.*
+import org.junit.AfterClass
+import org.junit.Before
+import org.junit.BeforeClass
+import org.junit.Test
+
+private const val VALUE = "value"
 
 class UseCaseTest {
     @Before
@@ -15,17 +19,24 @@ class UseCaseTest {
     }
 
     @Test
-    fun testInterceptor() {
+    fun testSubscribe() {
         val interceptor = mock<(Any) -> Unit>()
         UseCase.addInterceptor(interceptor)
 
-        val useCase = mock<UseCase<UseCase.Params, String>> {
-            on { build() } doReturn Observable.just("value")
+        val useCase = object : UseCase<UseCase.Params, String>() {
+            override fun build(): Observable<String> {
+                return Observable.just(VALUE)
+            }
         }
 
-        useCase.subscribe(UseCase.Params()) {}
+        useCase.test(UseCase.Params()).apply {
+            awaitTerminalEvent()
+            assertComplete()
+            assertNoErrors()
+            assertResult(VALUE)
+        }
 
-        verify(interceptor).invoke("value")
+        verify(interceptor).invoke(VALUE)
     }
 
     companion object {
