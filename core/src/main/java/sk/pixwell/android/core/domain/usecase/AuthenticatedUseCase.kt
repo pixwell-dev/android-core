@@ -1,4 +1,4 @@
-package sk.pixwell.android.core.domain
+package sk.pixwell.android.core.domain.usecase
 
 import arrow.core.Either
 import io.reactivex.Observable
@@ -72,5 +72,5 @@ abstract class AuthenticatedUseCase<A, P : UseCase.Params, T : Any> : UseCase<P,
 
 sealed class AuthError {
     object NotAuthenticatedError : AuthError()
-    data class OtherError(val msg: String) : AuthError()
+    data class OtherError(val message: String) : AuthError()
 }

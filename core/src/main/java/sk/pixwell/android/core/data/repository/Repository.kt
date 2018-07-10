@@ -1,4 +1,4 @@
-package sk.pixwell.android.core.data
+package sk.pixwell.android.core.data.repository
 
 import arrow.core.Either
 import arrow.core.Option

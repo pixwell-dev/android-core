@@ -1,4 +1,4 @@
-package sk.pixwell.android.core.sample
+package sk.pixwell.android.core.githubbrowser
 
 import org.junit.Test
 

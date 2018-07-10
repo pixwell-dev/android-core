@@ -5,6 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import arrow.core.toOption
 import org.junit.Test
+import sk.pixwell.android.core.data.repository.Repository
 
 private const val LOCAL = "local"
 private const val REMOTE = "remote"

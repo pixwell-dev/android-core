@@ -5,14 +5,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -26,19 +26,19 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
+    implementation 'com.google.android.material:material:1.0.0-beta01'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.0-alpha3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha3'
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-alpha04'
 
     implementation 'com.github.ajalt:timberkt:1.5.0'
 
-    def lifecycle_version = "1.1.1"
-    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
-    kapt "android.arch.lifecycle:compiler:$lifecycle_version"
-    testImplementation "android.arch.core:core-testing:$lifecycle_version"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
+    kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0-beta01'
+    testImplementation 'androidx.arch.core:core-testing:2.0.0-beta01'
 
     implementation "io.reactivex.rxjava2:rxjava:2.1.14"
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
@@ -52,4 +52,10 @@ dependencies {
     implementation "io.arrow-kt:arrow-instances-core:$arrow_version"
     implementation "io.arrow-kt:arrow-instances-data:$arrow_version"
     kapt "io.arrow-kt:arrow-annotations-processor:$arrow_version"
+
+    def glide_version = "4.7.1"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
+
+    implementation 'com.github.salomonbrys.kotson:kotson:2.5.0'
 }

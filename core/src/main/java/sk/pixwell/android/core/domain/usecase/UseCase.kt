@@ -1,4 +1,4 @@
-package sk.pixwell.android.core.domain
+package sk.pixwell.android.core.domain.usecase
 
 import android.util.Log
 import com.github.ajalt.timberkt.e

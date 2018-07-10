@@ -12,6 +12,9 @@ import io.reactivex.schedulers.Schedulers
 import org.junit.Assert.assertEquals
 import org.junit.BeforeClass
 import org.junit.Test
+import sk.pixwell.android.core.domain.usecase.AuthError
+import sk.pixwell.android.core.domain.usecase.AuthenticatedUseCase
+import sk.pixwell.android.core.domain.usecase.UseCase
 
 private const val TOKEN = "token"
 private const val ERROR = "error"
@@ -79,9 +82,8 @@ class AuthenticatedUseCaseTest {
 
     @Test
     fun testOneShotAutoLogin() {
-        var isAuthenticated = false
-
         val useCase = object : AuthenticatedUseCase<String, UseCase.Params, String>() {
+            private var isAuthenticated = false
             override val autoLogin = true
 
             override fun buildAuth(): Observable<Either<AuthError, String>> {
