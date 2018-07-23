@@ -71,6 +71,8 @@ abstract class AuthenticatedUseCase<A, P : UseCase.Params, T : Any> : UseCase<P,
 }
 
 sealed class AuthError {
+    object InvalidTokenError : AuthError()
+    object TokenExpiredError : AuthError()
     object NotAuthenticatedError : AuthError()
     data class OtherError(val message: String) : AuthError()
 }
