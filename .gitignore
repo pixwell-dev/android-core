@@ -185,6 +185,10 @@ $RECYCLE.BIN/
 
 # End of https://www.gitignore.io/api/android,intellij,linux,osx,windows
 
+# Signing files, available on: https://deal.pixwell.io/keychain/38 and https://deal.pixwell.io/keychain/39
+/example.jks
+/keystore.properties
+
 \.idea/modules\.xml
 
 \.idea/misc\.xml
