@@ -15,6 +15,7 @@
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/loader"
         style="?android:progressBarStyle"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
