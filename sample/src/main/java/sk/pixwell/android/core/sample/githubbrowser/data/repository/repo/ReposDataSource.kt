@@ -5,6 +5,7 @@ import androidx.paging.PositionalDataSource
 import com.github.ajalt.timberkt.e
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
+import sk.pixwell.android.core.arch.RetryRequest
 import sk.pixwell.android.core.sample.githubbrowser.domain.model.RepoModel
 
 class ReposDataSource : PositionalDataSource<RepoModel>(), KoinComponent {
@@ -12,16 +13,15 @@ class ReposDataSource : PositionalDataSource<RepoModel>(), KoinComponent {
     private val repository by inject<RepoRepository>()
     val isLoading = MutableLiveData<Boolean>()
     val count = MutableLiveData<Int>()
+    private val requests = mutableSetOf<RetryRequest<*, *>>()
 
     override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<RepoModel>) {
         isLoading.postValue(true)
+        val request =
         repository.getReposTop(params.requestedLoadSize).blockingForEach { result ->
             isLoading.postValue(false)
             result.fold({
                 e { "getCurrentEvents error: $it" }
-                val memory = {
-                    loadInitial(params, callback)
-                }
 
             }, {
                 val count = it.totalCount

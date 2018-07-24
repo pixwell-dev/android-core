@@ -11,7 +11,7 @@ class RepoRepository(
     )
 
     fun getCurrentRepos(page: Int, perPage: Int) = buildSource(
-            CachePolicy.NetworkOnly,
-            remote = { remote.getReposCurrent(page, perPage) }
+        CachePolicy.NetworkOnly,
+        remote = { remote.getReposCurrent(page, perPage) }
     )
 }
