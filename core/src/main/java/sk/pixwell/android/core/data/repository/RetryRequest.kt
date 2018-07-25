@@ -12,10 +12,11 @@ class RetryRequest<E, D>(request: () -> Either<E, D>, maxRetryCount: Int = 0) {
     private var _interval: Long = 1
     val interval: Long get() = _interval
     private val subject: Subject<Long> = BehaviorSubject.createDefault(interval)
-    val observable = subject.switchMap { Observable.timer(interval, TimeUnit.SECONDS) }
-        .map { request.invoke() }
-        .doOnNext { it.fold(::handleRequestError, ::handleRequestSuccess) }
-        .take(maxRetryCount + 1L)
+    val observable: Observable<Either<E, D>> =
+        subject.switchMap { Observable.timer(interval, TimeUnit.SECONDS) }
+            .map { request.invoke() }
+            .doOnNext { it.fold(::handleRequestError, ::handleRequestSuccess) }
+            .take(maxRetryCount + 1L)
 
     private fun handleRequestError(error: E) {
         d { "requestError: $error" }

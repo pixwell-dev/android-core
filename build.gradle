@@ -1,20 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-
-def keystoreProperties = new Properties()
-
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
-project.ext {
-    KEYSTORE_STORE_FILE = rootProject.file(keystoreProperties['storeFile'])
-    KEYSTORE_STORE_PASSWORD = keystoreProperties['storePassword']
-    KEYSTORE_KEY_ALIAS = keystoreProperties['keyAlias']
-    KEYSTORE_KEY_PASSWORD = keystoreProperties['keyPassword']
-}
-
 buildscript {
-    ext.kotlin_version = '1.2.50'
+    ext.kotlin_version = '1.2.51'
     repositories {
         google()
         jcenter()
