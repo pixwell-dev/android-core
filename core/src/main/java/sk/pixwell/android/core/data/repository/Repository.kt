@@ -27,6 +27,7 @@ abstract class Repository {
             val sources = when (cachePolicy) {
                 CachePolicy.LocalOnly -> listOf(localObservable)
                 CachePolicy.LocalFirst -> listOf(localObservable, remoteObservable)
+                CachePolicy.LocalBefore -> listOf(localObservable, remoteObservable)
                 CachePolicy.NetworkOnly -> listOf(remoteObservable)
                 CachePolicy.NetworkFirst -> listOf(remoteObservable, localObservable)
             }
@@ -39,7 +40,7 @@ abstract class Repository {
                     source.filter { it.isRight() }
                         .switchIfEmpty(remoteObservable)
                 }
-                CachePolicy.NetworkFirst -> {
+                CachePolicy.NetworkFirst, CachePolicy.LocalBefore -> {
                     source.takeUntil { it.isRight() }
                         .filter { it.isRight() }
                         .switchIfEmpty(remoteObservable)
@@ -52,6 +53,7 @@ abstract class Repository {
     sealed class CachePolicy {
         object LocalOnly : CachePolicy()
         object LocalFirst : CachePolicy()
+        object LocalBefore : CachePolicy()
         object NetworkOnly : CachePolicy()
         object NetworkFirst : CachePolicy()
     }

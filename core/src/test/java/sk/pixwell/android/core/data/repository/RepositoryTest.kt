@@ -173,4 +173,60 @@ class RepositoryTest {
             assertResult(REMOTE.right())
         }
     }
+
+    @Test
+    fun testBuildSourceLocalBeforeErrorError() {
+        Repository.buildSource<String, String>(
+            Repository.CachePolicy.LocalBefore,
+            local = { None },
+            remote = { REMOTE.left() }
+        ).test().apply {
+            awaitTerminalEvent()
+            assertComplete()
+            assertNoErrors()
+            assertResult(REMOTE.left())
+        }
+    }
+
+    @Test
+    fun testBuildSourceLocalBeforeErrorSuccess() {
+        Repository.buildSource<String, String>(
+            Repository.CachePolicy.LocalBefore,
+            local = { None },
+            remote = { REMOTE.right() }
+        ).test().apply {
+            awaitTerminalEvent()
+            assertComplete()
+            assertNoErrors()
+            assertResult(REMOTE.right())
+        }
+    }
+
+    @Test
+    fun testBuildSourceLocalBeforeSuccessError() {
+        Repository.buildSource(
+            Repository.CachePolicy.LocalBefore,
+            local = { LOCAL.toOption() },
+            remote = { REMOTE.left() }
+        ).test().apply {
+            awaitTerminalEvent()
+            assertComplete()
+            assertNoErrors()
+            assertResult(LOCAL.right())
+        }
+    }
+
+    @Test
+    fun testBuildSourceLocalBeforeSuccessSuccess() {
+        Repository.buildSource<String, String>(
+            Repository.CachePolicy.LocalBefore,
+            local = { LOCAL.toOption() },
+            remote = { REMOTE.right() }
+        ).test().apply {
+            awaitTerminalEvent()
+            assertComplete()
+            assertNoErrors()
+            assertResult(LOCAL.right())
+        }
+    }
 }
