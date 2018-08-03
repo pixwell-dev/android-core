@@ -30,7 +30,7 @@ class AuthenticatedUseCaseTest {
                 return Observable.just(AuthError.NotAuthenticatedError.left())
             }
 
-            override fun goToLogin() {
+            override fun signIn() {
                 goToLogin()
             }
 
@@ -62,7 +62,7 @@ class AuthenticatedUseCaseTest {
                 return Observable.just(TOKEN.right())
             }
 
-            override fun goToLogin() {
+            override fun signIn() {
                 goToLogin()
             }
 
@@ -84,7 +84,7 @@ class AuthenticatedUseCaseTest {
     fun testOneShotAutoLogin() {
         val useCase = object : AuthenticatedUseCase<String, UseCase.Params, String>() {
             private var isAuthenticated = false
-            override val autoLogin = true
+            override val autoSignIn = true
 
             override fun buildAuth(): Observable<Either<AuthError, String>> {
                 return if (isAuthenticated) {
@@ -94,7 +94,7 @@ class AuthenticatedUseCaseTest {
                 }
             }
 
-            override fun goToLogin() {
+            override fun signIn() {
                 isAuthenticated = true
                 AuthenticatedUseCase.notifyAuthStatusChanged()
             }

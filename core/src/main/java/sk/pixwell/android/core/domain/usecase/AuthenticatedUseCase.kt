@@ -7,7 +7,7 @@ import io.reactivex.subjects.ReplaySubject
 import io.reactivex.subjects.Subject
 
 abstract class AuthenticatedUseCase<A, P : UseCase.Params, T : Any> : UseCase<P, T>() {
-    open val autoLogin = false
+    open val autoSignIn = false
     open val oneShot: Boolean = true
 
     private lateinit var source: Subject<T>
@@ -16,7 +16,7 @@ abstract class AuthenticatedUseCase<A, P : UseCase.Params, T : Any> : UseCase<P,
 
     abstract fun buildAuth(): Observable<Either<AuthError, A>>
 
-    abstract fun goToLogin()
+    abstract fun signIn()
 
     abstract fun onAuthError(error: AuthError): T
 
@@ -38,8 +38,8 @@ abstract class AuthenticatedUseCase<A, P : UseCase.Params, T : Any> : UseCase<P,
     private fun handleAuthError(error: AuthError) {
         source.onNext(onAuthError(error))
         when (error) {
-            AuthError.NotAuthenticatedError -> {
-                if (autoLogin) goToLogin()
+            AuthError.NotAuthenticatedError, AuthError.InvalidTokenError, AuthError.TokenExpiredError -> {
+                if (autoSignIn) signIn()
             }
         }
     }
