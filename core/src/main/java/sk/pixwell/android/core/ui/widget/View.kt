@@ -5,7 +5,9 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.os.Build
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 
 fun View.showKeyboard() {
@@ -33,4 +35,22 @@ fun View.toBitmap(): Bitmap {
     background?.draw(canvas)
     draw(canvas)
     return bitmap
+}
+
+fun View.onGlobalLayout(onGlobalLayout: View.() -> Unit) {
+    val view = this
+    viewTreeObserver.addOnGlobalLayoutListener(
+        object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                onGlobalLayout(view)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    viewTreeObserver.removeOnGlobalLayoutListener(this)
+                } else {
+                    @Suppress("DEPRECATION")
+                    viewTreeObserver.removeGlobalOnLayoutListener(this)
+                }
+            }
+        }
+    )
+    requestLayout()
 }
