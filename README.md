@@ -36,3 +36,7 @@ project.ext {
 2. On root project we must add **certificate file (.jks)** and **keystore.properties**
 
 *Example **certificate file (.jks)** and **keystore.properties*** you can find on Pixwell deal keychain.
+
+## What to do next
+* include permission handling or at least thing about it
+* include camera and gallery handling 
