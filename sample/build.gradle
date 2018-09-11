@@ -6,19 +6,10 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
-
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-
-project.ext {
-    KEYSTORE_STORE_FILE = rootProject.file(keystoreProperties['storeFile'])
-    KEYSTORE_STORE_PASSWORD = keystoreProperties['storePassword']
-    KEYSTORE_KEY_ALIAS = keystoreProperties['keyAlias']
-    KEYSTORE_KEY_PASSWORD = keystoreProperties['keyPassword']
-}
-
 android {
+    signingConfigs {
+        release
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "sk.pixwell.android.core"
@@ -29,47 +20,50 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
-
-    signingConfigs {
-        release {
-            storeFile project.KEYSTORE_STORE_FILE
-            storePassword project.KEYSTORE_STORE_PASSWORD
-            keyAlias project.KEYSTORE_KEY_ALIAS
-            keyPassword project.KEYSTORE_KEY_PASSWORD
-        }
-    }
-
     buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
         debug{
             applicationIdSuffix ".dev"
          }
-        release {
-            minifyEnabled false
-            signingConfig signingConfigs.release
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
     }
 }
+
+
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+
+if (keystorePropertiesFile.canRead()){
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+    android.signingConfigs.release.storeFile = file(keystoreProperties['storeFile'])
+    android.signingConfigs.release.storePassword = keystoreProperties['storePassword']
+    android.signingConfigs.release.keyAlias = keystoreProperties['keyAlias']
+    android.signingConfigs.release.keyPassword = keystoreProperties['keyPassword']
+}else {
+    println 'signing.properties not found'
+}
+
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':core')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
-    implementation 'com.google.android.material:material:1.0.0-beta01'
+    implementation 'androidx.appcompat:appcompat:1.0.0-rc01'
+    implementation 'com.google.android.material:material:1.0.0-rc01'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha3'
+    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-alpha04'
 
     implementation 'com.github.ajalt:timberkt:1.5.0'
 
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
-    kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0-beta01'
-    testImplementation 'androidx.arch.core:core-testing:2.0.0-beta01'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-rc01'
+    kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0-rc01'
+    testImplementation 'androidx.arch.core:core-testing:2.0.0-rc01'
 
     implementation "io.reactivex.rxjava2:rxjava:2.1.14"
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
@@ -94,7 +88,7 @@ dependencies {
 
     implementation 'org.koin:koin-android-architecture:0.9.3'
 
-    def nav_version = "1.0.0-alpha02"
+    def nav_version = "1.0.0-alpha05"
     implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
     implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
 
