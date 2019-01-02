@@ -8,7 +8,7 @@ import io.reactivex.subjects.Subject
 
 abstract class AuthenticatedUseCase<A, P : UseCase.Params, T : Any> : UseCase<P, T>() {
     open val autoSignIn = false
-    open val oneShot: Boolean = true
+    //open val oneShot: Boolean = true
 
     private lateinit var source: Subject<T>
     private var authDisposable: Disposable? = null
@@ -25,7 +25,7 @@ abstract class AuthenticatedUseCase<A, P : UseCase.Params, T : Any> : UseCase<P,
     private fun authenticate() {
         authDisposable?.dispose()
         authDisposable = buildAuth()
-            .subscribe({ it.fold(::handleAuthError, ::handleAuthSuccess) }, ::handleError)
+                .subscribe({ it.fold(::handleAuthError, ::handleAuthSuccess) }, ::handleError)
     }
 
     override fun build(): Observable<T> {
@@ -45,13 +45,13 @@ abstract class AuthenticatedUseCase<A, P : UseCase.Params, T : Any> : UseCase<P,
     }
 
     private fun handleAuthSuccess(token: A) {
-        if (oneShot) instances.remove(this)
+       // if (oneShot) instances.remove(this)
         authSuccessDisposable?.dispose()
         authSuccessDisposable = onAuthSuccess(token)
-            .subscribe({
-                source.onNext(it)
-                if (oneShot) source.onComplete()
-            }, ::handleError)
+                .subscribe({
+                    source.onNext(it)
+                    //if (oneShot) source.onComplete()
+                }, ::handleError)
     }
 
     override fun clear() {
@@ -74,5 +74,6 @@ sealed class AuthError {
     object InvalidTokenError : AuthError()
     object TokenExpiredError : AuthError()
     object NotAuthenticatedError : AuthError()
+    object TooManyRequests : AuthError()
     data class OtherError(val message: String) : AuthError()
 }

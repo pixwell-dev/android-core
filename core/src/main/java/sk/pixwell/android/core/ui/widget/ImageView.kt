@@ -8,10 +8,10 @@ import com.bumptech.glide.request.RequestOptions
 fun <T> ImageView.loadImageAsync(source: T?, requestOptions: RequestOptions = RequestOptions()) {
     if (source != null) {
         Glide.with(this)
-            .load(source)
-            .apply(requestOptions)
-            .transition(DrawableTransitionOptions.withCrossFade())
-            .into(this)
+                .load(source)
+                .apply(requestOptions)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .into(this)
     } else {
         Glide.with(this)
             .clear(this)

@@ -37,3 +37,9 @@ inline fun <reified T : ViewModel> AppCompatActivity.obtainViewModel(
     owner: AppCompatActivity = this
 ) =
     ViewModelProviders.of(owner).get(T::class.java)
+
+inline fun <reified T : ViewModel> Fragment.obtainViewModel(
+        factory: ViewModelProvider.Factory,
+        owner: Activity
+) =
+        ViewModelProviders.of(owner as FragmentActivity, factory).get(T::class.java)
