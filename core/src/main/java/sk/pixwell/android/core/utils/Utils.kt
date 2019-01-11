@@ -1,7 +1,10 @@
 package sk.pixwell.android.core.utils
 
 import android.content.Context
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneId
 import sk.pixwell.android.core.R
+import sk.pixwell.android.core.getDelta
 import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -50,13 +53,14 @@ class TimeAgo {
         return this
     }
 
-    fun getTimeAgo(startDate: Date): String {
+    fun getTimeAgo(startDate: LocalDateTime): String {
 
         //  date counting is done till todays date
-        val endDate = dateTimeNow
+        val endDate = LocalDateTime.now(ZoneId.systemDefault())
 
         //  time difference in milli seconds
-        val different = endDate.getTime() - startDate.getTime()
+        org.threeten.bp.LocalDateTime.now(ZoneId.systemDefault())
+        val different = endDate.getDelta(startDate)
 
         if (context == null) {
             if (different < MINUTE_MILLIS) {
