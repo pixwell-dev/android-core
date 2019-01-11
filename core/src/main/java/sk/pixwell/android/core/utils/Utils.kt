@@ -39,7 +39,7 @@ class TimeAgo {
         val endDate = LocalDateTime.now(ZoneId.systemDefault())
 
         //  time difference in milli seconds
-        val different = ChronoUnit.MILLIS.between(endDate, startDate)
+        val different = ChronoUnit.MILLIS.between(startDate, endDate)
 
         if (context == null) {
             if (different < MINUTE_MILLIS) {
