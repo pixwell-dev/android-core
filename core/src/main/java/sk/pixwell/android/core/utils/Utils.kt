@@ -1,13 +1,14 @@
 package sk.pixwell.android.core.utils
 
 import android.content.Context
+import com.jakewharton.threetenabp.AndroidThreeTen
 import org.threeten.bp.LocalDateTime
-import org.threeten.bp.ZoneId
 import sk.pixwell.android.core.R
 import sk.pixwell.android.core.getDelta
-import java.text.DateFormat
-import java.text.ParseException
-import java.text.SimpleDateFormat
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.temporal.ChronoUnit
 import java.util.*
 
 
@@ -18,38 +19,17 @@ inline fun consume(f: () -> Unit): Boolean {
 
 class TimeAgo {
 
-    private var simpleDateFormat: SimpleDateFormat = SimpleDateFormat("dd/M/yyyy HH:mm:ss")
-    private var dateFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
-    private var timeFormat: DateFormat = SimpleDateFormat("h:mm aa")
-    private var dateTimeNow: Date = Date()
+
+    private var dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    private var timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a")
     private var timeFromData: String = ""
     private var pastDate: String = ""
-    private var sDateTimeNow: String
 
     private var context: Context? = null
 
-    init {
-
-        val now = Date()
-        sDateTimeNow = simpleDateFormat.format(now)
-
-        try {
-            dateTimeNow = simpleDateFormat.parse(sDateTimeNow)
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
-
-    }
-
     fun locale(context: Context): TimeAgo {
         this.context = context
-        return this
-    }
-
-    fun with(simpleDateFormat: SimpleDateFormat): TimeAgo {
-        this.simpleDateFormat = simpleDateFormat
-        this.dateFormat = SimpleDateFormat(simpleDateFormat.toPattern().split(" ")[0])
-        this.timeFormat = SimpleDateFormat(simpleDateFormat.toPattern().split(" ")[1])
+        AndroidThreeTen.init(context)
         return this
     }
 
@@ -59,8 +39,7 @@ class TimeAgo {
         val endDate = LocalDateTime.now(ZoneId.systemDefault())
 
         //  time difference in milli seconds
-        org.threeten.bp.LocalDateTime.now(ZoneId.systemDefault())
-        val different = endDate.getDelta(startDate)
+        val different = ChronoUnit.MILLIS.between(endDate, startDate)
 
         if (context == null) {
             if (different < MINUTE_MILLIS) {
