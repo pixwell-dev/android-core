@@ -424,3 +424,7 @@ sample/\.idea/modules\.xml
 sample/\.idea/runConfigurations\.xml
 
 sample/\.idea/vcs\.xml
+
+core/\.idea/
+
+\.idea/
