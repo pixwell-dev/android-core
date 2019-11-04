@@ -8,6 +8,7 @@ import io.reactivex.subjects.Subject
 
 abstract class AuthenticatedUseCase<A, P : UseCase.Params, T : Any> : UseCase<P, T>() {
     open val autoSignIn = false
+    open val signInRequired = true
     //open val oneShot: Boolean = true
 
     private lateinit var source: Subject<T>
@@ -41,7 +42,7 @@ abstract class AuthenticatedUseCase<A, P : UseCase.Params, T : Any> : UseCase<P,
         source.onNext(onAuthError(error))
         when (error) {
             AuthError.NotAuthenticatedError -> {
-                pleaseSignIn()
+                if(signInRequired) pleaseSignIn()
             }
             AuthError.InvalidTokenError, AuthError.TokenExpiredError -> {
                 if (autoSignIn) signIn()
