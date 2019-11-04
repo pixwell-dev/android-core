@@ -18,6 +18,8 @@ abstract class AuthenticatedUseCase<A, P : UseCase.Params, T : Any> : UseCase<P,
 
     abstract fun signIn()
 
+    abstract fun pleaseSignIn()
+
     abstract fun onAuthError(error: AuthError): T
 
     abstract fun onAuthSuccess(token: A): Observable<T>
@@ -38,7 +40,10 @@ abstract class AuthenticatedUseCase<A, P : UseCase.Params, T : Any> : UseCase<P,
     private fun handleAuthError(error: AuthError) {
         source.onNext(onAuthError(error))
         when (error) {
-            AuthError.NotAuthenticatedError, AuthError.InvalidTokenError, AuthError.TokenExpiredError -> {
+            AuthError.NotAuthenticatedError -> {
+                pleaseSignIn()
+            }
+            AuthError.InvalidTokenError, AuthError.TokenExpiredError -> {
                 if (autoSignIn) signIn()
             }
         }
