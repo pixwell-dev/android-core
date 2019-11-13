@@ -71,7 +71,9 @@ abstract class AuthenticatedUseCase<A, P : UseCase.Params, T : Any> : UseCase<P,
         private val instances = mutableSetOf<AuthenticatedUseCase<*, *, *>>()
 
         fun notifyAuthStatusChanged() {
-            instances.forEach { it.authenticate() }
+            for (i in 0 until instances.size) {
+                instances.elementAt(i).authenticate()
+            }
         }
     }
 }
