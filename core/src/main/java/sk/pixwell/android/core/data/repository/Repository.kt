@@ -51,10 +51,35 @@ abstract class Repository {
     }
 
     sealed class CachePolicy {
+        /**
+         * Tries to use only local data source
+         */
         object LocalOnly : CachePolicy()
+
+        /**
+         * Tries to use local first and then remote. If both observables result in success, it
+         * returns both results.
+         */
         object LocalFirst : CachePolicy()
+
+        /**
+         * Tries to use local data source first and returns value if and only if it result in success.
+         * Difference between LocalFirst and LocalBefore is that if remote and local result in success:
+         *
+         * * LocalFirst - returns both observables
+         * * LocalBefore - returns only local observable
+         *
+         */
         object LocalBefore : CachePolicy()
+
+        /**
+         * Tries to use only remote data source
+         */
         object NetworkOnly : CachePolicy()
+
+        /**
+         * Tries to use only remote data source first, and only if it fails, returns local
+         */
         object NetworkFirst : CachePolicy()
     }
 }
